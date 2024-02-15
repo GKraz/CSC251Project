@@ -127,14 +127,14 @@ public class Policy
 
     public void SetHolderHeight(double holderHeight)
     {
-        if (holderHeight < .1) holderHeight = .1;
+        if (holderHeight <= 0) holderHeight = 1;
 
         this.holderHeight = holderHeight;
     }
 
     public void SetHolderWeight(double holderWeight)
     {
-        if (holderWeight < .1) holderWeight = .1;
+        if (holderWeight <= 0) holderWeight = 1;
 
         this.holderWeight = holderWeight;
     }
