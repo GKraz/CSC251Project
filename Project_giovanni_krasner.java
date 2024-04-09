@@ -1,51 +1,54 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Project_giovanni_krasner
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
-        Scanner scanner = new Scanner(System.in);
+        File file = new File("PolicyInformation.txt");
 
-        System.out.print("Please enter the Policy Number: ");
-        int policyNumber = Integer.parseInt(scanner.nextLine());
+        if (!file.exists()) {
+            System.out.println("Could not find file!");
+            return;
+        }
 
-        System.out.print("Please enter the Provider Name: ");
-        String providerName = scanner.nextLine();
+        Scanner inputFile = new Scanner(file);
 
-        System.out.print("Please enter the Policyholder’s First Name: ");
-        String holderFirstName = scanner.nextLine();
+        StringBuilder serializedPolicies = new StringBuilder();
 
-        System.out.print("Please enter the Policyholder’s Last Name: ");
-        String holderLastName = scanner.nextLine();
+        while(inputFile.hasNext()) {
+            serializedPolicies.append(inputFile.nextLine()).append("_");
+        }
 
-        System.out.print("Please enter the Policyholder’s Age: ");
-        int holderAge = Integer.parseInt(scanner.nextLine());
+        String[] serializedPoliciesArray = serializedPolicies.toString().split("__");
+        Policy[] policiesArray = new Policy[serializedPoliciesArray.length];
+        int smokerCount = 0;
 
-        System.out.print("Please enter the Policyholder’s Smoking Status (smoker/non-smoker): ");
-        String smokingStatus = scanner.nextLine();
+        for (int i = 0; i < serializedPoliciesArray.length; i++) {
+            String serializedPolicyData = serializedPoliciesArray[i];
+            String[] parsedPolicyData = serializedPolicyData.split("_");
 
-        System.out.print("Please enter the Policyholder’s Height (in inches): ");
-        double holderHeight = Double.parseDouble(scanner.nextLine());
+            Policy policy = new Policy();
+            policy.SetPolicyNumber(Integer.parseInt(parsedPolicyData[0]));
+            policy.SetProviderName(parsedPolicyData[1]);
+            policy.SetHolderFirstName(parsedPolicyData[2]);
+            policy.SetHolderLastName(parsedPolicyData[3]);
+            policy.SetHolderAge(Integer.parseInt(parsedPolicyData[4]));
+            policy.SetSmokingStatus(parsedPolicyData[5]);
+            policy.SetHolderHeight(Double.parseDouble(parsedPolicyData[6]));
+            policy.SetHolderWeight(Double.parseDouble(parsedPolicyData[7]));
 
-        System.out.print("Please enter the Policyholder’s Weight (in pounds): ");
-        double holderWeight = Double.parseDouble(scanner.nextLine());
+            if (policy.GetSmokingStatus().equalsIgnoreCase("smoker")) smokerCount += 1;
 
-        Policy policy = new Policy(policyNumber, providerName, holderFirstName, holderLastName, holderAge, smokingStatus, holderHeight, holderWeight);
+            policiesArray[i] = policy;
+        }
 
-        System.out.printf("""
-                Policy Number: %d
-                Provider Name: %s
-                Policyholder’s First Name: %s
-                Policyholder’s Last Name: %s
-                Policyholder’s Age: %d
-                Policyholder’s Smoking Status: %s
-                Policyholder’s Height: %.1f inches
-                Policyholder’s Weight: %.1f pounds
-                Policyholder’s BMI: %.2f
-                Policy Price: $%.2f
-                """, policy.GetPolicyNumber(), policy.GetProviderName(), policy.GetHolderFirstName(),
-                policy.GetHolderLastName(), policy.GetHolderAge(), policy.GetSmokingStatus(), policy.GetHolderHeight(),
-                policy.GetHolderWeight(), policy.CalculateBMI(), policy.CalculatePolicyPrice());
+        for(Policy policy : policiesArray) {
+            System.out.println(policy);
+        }
 
+        System.out.printf("\nThe number of policies with a smoker is: %d", smokerCount);
+        System.out.printf("\nThe number of policies with a non-smoker is: %d", serializedPoliciesArray.length - smokerCount);
     }
 }

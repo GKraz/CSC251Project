@@ -226,4 +226,20 @@ public class Policy
 
         this.holderWeight = holderWeight;
     }
+
+    public String toString() {
+        return String.format("""
+                Policy Number: %d
+                Provider Name: %s
+                Policyholder’s First Name: %s
+                Policyholder’s Last Name: %s
+                Policyholder’s Age: %d
+                Policyholder’s Smoking Status: %s
+                Policyholder’s Height: %.1f inches
+                Policyholder’s Weight: %.1f pounds
+                Policyholder’s BMI: %.2f
+                Policy Price: $%.2f
+                """, policyNumber, providerName, holderFirstName, holderLastName, holderAge, smokingStatus,
+                holderHeight, holderWeight, CalculateBMI(), CalculatePolicyPrice());
+    }
 }
