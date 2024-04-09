@@ -9,3 +9,7 @@
 ## Part 2
  Completed 4/8 \
  Added file reading and javadoc comments
+
+## Part 3
+ Completed 4/8 \
+ Added PolicyHolder class and updated code to account for it
