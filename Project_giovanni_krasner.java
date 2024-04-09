@@ -23,7 +23,6 @@ public class Project_giovanni_krasner
 
         String[] serializedPoliciesArray = serializedPolicies.toString().split("__");
         Policy[] policiesArray = new Policy[serializedPoliciesArray.length];
-        int smokerCount = 0;
 
         for (int i = 0; i < serializedPoliciesArray.length; i++) {
             String serializedPolicyData = serializedPoliciesArray[i];
@@ -32,14 +31,13 @@ public class Project_giovanni_krasner
             Policy policy = new Policy();
             policy.SetPolicyNumber(Integer.parseInt(parsedPolicyData[0]));
             policy.SetProviderName(parsedPolicyData[1]);
-            policy.SetHolderFirstName(parsedPolicyData[2]);
-            policy.SetHolderLastName(parsedPolicyData[3]);
-            policy.SetHolderAge(Integer.parseInt(parsedPolicyData[4]));
-            policy.SetSmokingStatus(parsedPolicyData[5]);
-            policy.SetHolderHeight(Double.parseDouble(parsedPolicyData[6]));
-            policy.SetHolderWeight(Double.parseDouble(parsedPolicyData[7]));
-
-            if (policy.GetSmokingStatus().equalsIgnoreCase("smoker")) smokerCount += 1;
+            policy.SetHolder(new PolicyHolder(
+                    parsedPolicyData[2], // First Name
+                    parsedPolicyData[3], // Last Name
+                    parsedPolicyData[5], // Smoking status
+                    Integer.parseInt(parsedPolicyData[4]), // Age
+                    Double.parseDouble(parsedPolicyData[6]), // Weight
+                    Double.parseDouble(parsedPolicyData[7]))); // Height
 
             policiesArray[i] = policy;
         }
@@ -48,7 +46,8 @@ public class Project_giovanni_krasner
             System.out.println(policy);
         }
 
-        System.out.printf("\nThe number of policies with a smoker is: %d", smokerCount);
-        System.out.printf("\nThe number of policies with a non-smoker is: %d", serializedPoliciesArray.length - smokerCount);
+        System.out.printf("\nThere were %d Policy objects created.\n", Policy.policyCount);
+        System.out.printf("\nThe number of policies with a smoker is: %d", Policy.smokerCount);
+        System.out.printf("\nThe number of policies with a non-smoker is: %d", serializedPoliciesArray.length - Policy.smokerCount);
     }
 }
